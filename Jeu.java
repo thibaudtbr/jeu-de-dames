@@ -95,4 +95,28 @@ public class Jeu {
         Jeu jeu = new Jeu(); // Crée une nouvelle partie
         jeu.lancerJeu(); // Lance la partie
     }
+
+    public boolean isDame() {
+        return Piece.getRole==3;
+    }
+
+    public void setPosition(int x, int y) {
+        this.positionX = x;
+        this.positionY = y;
+
+        // Vérifie si le pion doit être promu en dame
+        verifierPromotion();
+    }
+
+    private void verifierPromotion() {
+        if (couleur.equals(0) && positionY == 0) {
+            // Les pions blancs deviennent dames quand ils atteignent la ligne du haut
+            this.isDame = true;
+            System.out.println("Le pion blanc est devenu une dame !");
+        } else if (couleur.equals(1) && positionY == 10) {
+            // Les pions noirs deviennent dames quand ils atteignent la ligne du bas
+            this.isDame = true;
+            System.out.println("Le pion noir est devenu une dame !");
+        }
+    }
 }
