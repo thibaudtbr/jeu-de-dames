@@ -4,6 +4,7 @@ public class Pion extends Piece {
         super(couleur, line, column, role);
 
     }
+    @Override
     public boolean deplacementValide(Case caseDepart, Case caseArrivee, Plateau plateau) {
         int startLine = caseDepart.getLine();
         int startColumn = caseDepart.getColumn();
