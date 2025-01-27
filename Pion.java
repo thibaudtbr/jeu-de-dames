@@ -31,5 +31,18 @@ public class Pion extends Piece {
                 return diffLigne == 1; // Noirs descendent
             }
         }
+
+        // Vérification de la capture : deux cases en diagonale
+        if (diffColonne == 2 && Math.abs(diffLigne) == 2) {
+            int midLine = (startLine + endLine) / 2;
+            int midColumn = (startColumn + endColumn) / 2;
+            Case caseMilieu = plateau.getCase(midLine, midColumn);
+
+            // Vérifie s'il y a une pièce adverse sur la case du milieu
+            if (caseMilieu.getPiece() != null && !caseMilieu.getPiece().getCouleur().equals(this.getCouleur())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
