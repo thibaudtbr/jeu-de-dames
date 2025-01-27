@@ -2,6 +2,7 @@ public class Case {
     private int color;
     private int line;
     private int column;
+    private Piece piece;
 
     public Case(int line, int column) {
         this.line = line;
@@ -28,6 +29,14 @@ public class Case {
 
     public int getColor() {
         return color;
+    }
+
+
+    public Piece getPiece() { 
+        return piece; 
+    }
+    public void setPiece(Piece piece) { 
+        this.piece = piece; 
     }
 
     public static void main(String[] args) {
