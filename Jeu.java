@@ -105,10 +105,10 @@ public class Jeu {
         this.positionY = y;
 
         // Vérifie si le pion doit être promu en dame
-        verifierPromotion();
+        Promotion();
     }
 
-    private void verifierPromotion() {
+    private void Promotion() {
         if (couleur.equals(0) && positionY == 0) {
             // Les pions blancs deviennent dames quand ils atteignent la ligne du haut
             this.isDame = true;
