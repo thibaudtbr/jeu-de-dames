@@ -6,12 +6,16 @@ public class Plateau {
         this.damier =  new Case[10][10];
         startlaunchingDamier();
     }
+
+
     public Case getCase(int line, int column) {
         if (line >= 0 && line < 10 && column >= 0 && column < 10) {
             return damier[line][column];
         }
         return null; // Retourne null si les coordonnées sont hors limites
     }
+
+
     public Case[][] GetDamier () {
         return damier;
     }
@@ -23,9 +27,9 @@ public class Plateau {
 
                 // Placement des pions pour les joueurs sur les cases noires
                 if (line < 4 && (line + column) % 2 != 0) {
-                    cases[line][column].setPiece(new Pion(0, line, column, 2)); // Pions noirs
+                    cases[line][column].setPiece(new Pion(1, line, column, 2)); // Pions noirs
                 } else if (line > 5 && (line + column) % 2 != 0) {
-                    cases[line][column].setPiece(new Pion(1, line, column, 2)); // Pions blancs
+                    cases[line][column].setPiece(new Pion(0, line, column, 2)); // Pions blancs
                 }
             }
         }
@@ -49,17 +53,7 @@ public class Plateau {
     }
 
 
-    public static void main(String[] args) {
-        Plateau plateau = new Plateau();
+    public getCasesValides(Case caseCliquee) {}
 
-        Case[][] damier = plateau.GetDamier();
-        System.out.println("Affichage du damier : ");
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                int couleur = damier[i][j].GetColor(i,j);  // Récupère la couleur de la case
-                System.out.print(couleur + " ");  // Affiche 0 ou 1
-            }
-            System.out.println();  // Passe à la line suivante
-        }
     }
 }
