@@ -1,4 +1,4 @@
-public class Piece {
+public abstract class Piece {
     public int couleur;
     public int line;
     public int column;
