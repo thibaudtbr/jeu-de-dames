@@ -41,11 +41,11 @@ public class Plateau {
             for (int column = 0; column < 10; column++) {
                 Case currentCase = cases[line][column];
                 if (currentCase.getPiece() == null) {
-                    System.out.print("[ ]"); // Case vide
+                    System.out.print(cases.getColor()); // Case vide donc renvoie la case normale 
                 } else if (currentCase.getPiece() instanceof Pion) {
-                    System.out.print(currentCase.getPiece().getCouleur().charAt(0) + "P "); // B ou N pour Pion
+                    System.out.print(String.valueOf(currentCase.getPiece().getCouleur()) + String.valueOf(currentCase.getPiece().getRole())); // 02 (Pion blanc) ou 12 (Pion noir)
                 } else if (currentCase.getPiece() instanceof Dame) {
-                    System.out.print(currentCase.getPiece().getCouleur().charAt(0) + "D "); // B ou N pour Dame
+                    System.out.print(String.valueOf(currentCase.getPiece().getCouleur()) + String.valueOf(currentCase.getPiece().getRole())); // 03 (Dame blanche) ou 13 (Dame noire)
                 }
             }
             System.out.println(); // Nouvelle line pour chaque rangée
@@ -53,7 +53,9 @@ public class Plateau {
     }
 
 
-    public getCasesValides(Case caseCliquee) {}
-
+    public getCasesValides(Case caseCliquee) {
+        
     }
+
+
 }
