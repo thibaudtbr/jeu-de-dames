@@ -25,7 +25,7 @@ public class Pion extends Piece {
         }
         // déplacement classique en diagonale d'une case
         if (diffColonne == 1 && Math.abs(diffLigne) == 1) {
-            if (this.getCouleur().equals(0)) {
+            if (this.getCouleur()==0) {
                 return diffLigne == -1; // Blancs montent
             } else {
                 return diffLigne == 1; // Noirs descendent
@@ -39,7 +39,7 @@ public class Pion extends Piece {
             Case caseMilieu = plateau.getCase(midLine, midColumn);
 
             // Vérifie s'il y a une pièce adverse sur la case du milieu
-            if (caseMilieu.getPiece() != null && !caseMilieu.getPiece().getCouleur().equals(this.getCouleur())) {
+            if (caseMilieu.getPiece() != null && (caseMilieu.getPiece().getCouleur()==this.getCouleur()) == false) {
                 return true;
             }
         }
