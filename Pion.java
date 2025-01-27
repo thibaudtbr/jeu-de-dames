@@ -19,6 +19,10 @@ public class Pion extends Piece {
         if (endLine < 0 || endLine >= 10 || endColumn < 0 || endColumn >= 10) {
             return false;
         }
+        // Vérification que le déplacement est en diagonale
+        if (diffLigne != diffColonne) {
+            return false; // Pas un mouvement diagonal
+        }
 
         // Vérification que la case cible est vide
         if (caseArrivee.getPiece() != null) {
