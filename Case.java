@@ -39,19 +39,7 @@ public class Case {
         this.piece = piece; 
     }
 
-    public static void main(String[] args) {
-        Case case00 = new Case(0, 0);
-
-        // Appeler la méthode DonneLigne et afficher le résultat
-        int ligne = case00.getLine();
-        System.out.println("La ligne de la case est : " + ligne);
-
-        // Appeler la méthode DonneColonne et afficher le résultat
-        int colonne = case00.getColumn();
-        System.out.println("La colonne de la case est : " + colonne);
-
-        // Afficher la couleur de la case
-        int couleur = case00.setColor(0, 0);
-        System.out.println("La couleur de la case est : " + (couleur == 0 ? "blanc" : "noir"));
+    public boolean Vide() { 
+        return piece == null; 
     }
 }
