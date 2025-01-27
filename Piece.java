@@ -26,4 +26,6 @@ public class Piece {
     public int getRole() {
         return couleur;
     }
+
+    public abstract boolean deplacementValide();
 }
