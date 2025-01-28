@@ -53,9 +53,5 @@ public class Plateau {
     }
 
 
-    public getCasesValides(Case caseCliquee) {
-        
-    }
-
 
 }
