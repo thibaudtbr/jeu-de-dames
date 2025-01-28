@@ -23,13 +23,13 @@ public class Plateau {
     private void startlaunchingDamier() {
         for (int positionX = 0; positionX < 10; positionX++) {
             for (int positionY = 0; positionY < 10; positionY++) {
-                cases[positionX][positionY] = new Case(positionX, positionY);
+                damier[positionX][positionY] = new Case(positionX, positionY);
 
-                // Placement des pions pour les joueurs sur les cases noires
+                // Placement des pions pour les joueurs sur les damier noires
                 if (positionX < 4 && (positionX + positionY) % 2 != 0) {
-                    cases[positionX][positionY].setPiece(new Pion(1, positionX, positionY, 2)); // Pions noirs
+                    damier[positionX][positionY].setPiece(new Pion(1, positionX, positionY, 2)); // Pions noirs
                 } else if (positionX > 5 && (positionX + positionY) % 2 != 0) {
-                    cases[positionX][positionY].setPiece(new Pion(0, positionX, positionY, 2)); // Pions blancs
+                    damier[positionX][positionY].setPiece(new Pion(0, positionX, positionY, 2)); // Pions blancs
                 }
             }
         }
@@ -39,9 +39,9 @@ public class Plateau {
     public void afficherPlateau() {
         for (int positionX = 0; positionX < 10; positionX++) {
             for (int positionY = 0; positionY < 10; positionY++) {
-                Case currentCase = cases[positionX][positionY];
+                Case currentCase = damier[positionX][positionY];
                 if (currentCase.getPiece() == null) {
-                    System.out.print(cases.getColor()); // Case vide donc renvoie la case normale 
+                    System.out.print(damier[positionX][positionY].getColor()); // Case vide donc renvoie la case normale 
                 } else if (currentCase.getPiece() instanceof Pion) {
                     System.out.print(String.valueOf(currentCase.getPiece().getCouleur()) + String.valueOf(currentCase.getPiece().getRole())); // 02 (Pion blanc) ou 12 (Pion noir)
                 } else if (currentCase.getPiece() instanceof Dame) {
