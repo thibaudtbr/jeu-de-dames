@@ -36,7 +36,7 @@ public abstract class Piece {
         this.positionY = positionY;
 
         if (isDame() == false) {
-            Promotion();
+            promotion();
         }
     }
 
