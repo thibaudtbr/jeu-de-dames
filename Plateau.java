@@ -8,9 +8,9 @@ public class Plateau {
     }
 
 
-    public Case getCase(int line, int column) {
-        if (line >= 0 && line < 10 && column >= 0 && column < 10) {
-            return damier[line][column];
+    public Case getCase(int positionX, int positionY) {
+        if (positionX >= 0 && positionX < 10 && positionY >= 0 && positionY < 10) {
+            return damier[positionX][positionY];
         }
         return null; // Retourne null si les coordonnées sont hors limites
     }
@@ -21,15 +21,15 @@ public class Plateau {
     }
 
     private void startlaunchingDamier() {
-        for (int line = 0; line < 10; line++) {
-            for (int column = 0; column < 10; column++) {
-                cases[line][column] = new Case(line, column);
+        for (int positionX = 0; positionX < 10; positionX++) {
+            for (int positionY = 0; positionY < 10; positionY++) {
+                cases[positionX][positionY] = new Case(positionX, positionY);
 
                 // Placement des pions pour les joueurs sur les cases noires
-                if (line < 4 && (line + column) % 2 != 0) {
-                    cases[line][column].setPiece(new Pion(1, line, column, 2)); // Pions noirs
-                } else if (line > 5 && (line + column) % 2 != 0) {
-                    cases[line][column].setPiece(new Pion(0, line, column, 2)); // Pions blancs
+                if (positionX < 4 && (positionX + positionY) % 2 != 0) {
+                    cases[positionX][positionY].setPiece(new Pion(1, positionX, positionY, 2)); // Pions noirs
+                } else if (positionX > 5 && (positionX + positionY) % 2 != 0) {
+                    cases[positionX][positionY].setPiece(new Pion(0, positionX, positionY, 2)); // Pions blancs
                 }
             }
         }
@@ -37,9 +37,9 @@ public class Plateau {
 
 
     public void afficherPlateau() {
-        for (int line = 0; line < 10; line++) {
-            for (int column = 0; column < 10; column++) {
-                Case currentCase = cases[line][column];
+        for (int positionX = 0; positionX < 10; positionX++) {
+            for (int positionY = 0; positionY < 10; positionY++) {
+                Case currentCase = cases[positionX][positionY];
                 if (currentCase.getPiece() == null) {
                     System.out.print(cases.getColor()); // Case vide donc renvoie la case normale 
                 } else if (currentCase.getPiece() instanceof Pion) {
@@ -48,7 +48,7 @@ public class Plateau {
                     System.out.print(String.valueOf(currentCase.getPiece().getCouleur()) + String.valueOf(currentCase.getPiece().getRole())); // 03 (Dame blanche) ou 13 (Dame noire)
                 }
             }
-            System.out.println(); // Nouvelle line pour chaque rangée
+            System.out.println(); // Nouvelle positionX pour chaque rangée
         }
     }
 

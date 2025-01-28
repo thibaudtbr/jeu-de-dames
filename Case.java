@@ -1,27 +1,27 @@
 public class Case {
     private int color;
-    private int line;
-    private int column;
+    private int positionX;
+    private int positionY;
     private Piece piece;
 
-    public Case(int line, int column) {
-        this.line = line;
-        this.column = column;
-        this.color = setColor(line, column);
+    public Case(int positionX, int positionY) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.color = setColor(positionX, positionY);
     }
 
 
-    public int getLine() {
-        return line;
+    public int getpositionX() {
+        return positionX;
     }
 
-    public int getColumn() {
-        return column;
+    public int getpositionY() {
+        return positionY;
     }
 
     // Calcule la couleur en fonction des coordonnées
-    public int setColor(int line, int column) {
-        if ((line % 2 == 0 && column % 2 == 0) || (line % 2 == 1 && column % 2 == 1)) {
+    public int setColor(int positionX, int positionY) {
+        if ((positionX % 2 == 0 && positionY % 2 == 0) || (positionX % 2 == 1 && positionY % 2 == 1)) {
             return 0; // Blanc
         }
         return 1; // Noir

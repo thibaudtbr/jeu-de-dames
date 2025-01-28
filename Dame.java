@@ -1,22 +1,22 @@
 public class Dame extends Piece{
     
-    public Dame (int couleur, int line, int column, int role) {
-        super(couleur,line, column, role);
+    public Dame (int couleur, int positionX, int positionY, int role) {
+        super(couleur,positionX, positionY, role);
     }
 
     @Override
     public boolean deplacementValide(Case caseDepart, Case caseArrivee, Plateau plateau) {
-        int startLine = caseDepart.getLine();
-        int startColumn = caseDepart.getColumn();
-        int endLine = caseArrivee.getLine();
-        int endColumn = caseArrivee.getColumn();
+        int startpositionX = caseDepart.getpositionX();
+        int startpositionY = caseDepart.getpositionY();
+        int endpositionX = caseArrivee.getpositionX();
+        int endpositionY = caseArrivee.getpositionY();
 
         // Calcul des différences
-        int diffLigne = endLine - startLine;
-        int diffColonne = Math.abs(endColumn - startColumn);
+        int diffLigne = endpositionX - startpositionX;
+        int diffColonne = Math.abs(endpositionY - startpositionY);
 
         // Vérification des limites du plateau
-        if (endLine < 0 || endLine >= 10 || endColumn < 0 || endColumn >= 10) {
+        if (endpositionX < 0 || endpositionX >= 10 || endpositionY < 0 || endpositionY >= 10) {
             return false;
         }
 
@@ -31,13 +31,13 @@ public class Dame extends Piece{
         }
 
         // Vérification que le chemin est libre
-        int directionLigne = (endLine - startLine) / diffLigne; // +1 ou -1
-        int directionColonne = (endColumn - startColumn) / diffColonne; // +1 ou -1
+        int directionLigne = (endpositionX - startpositionX) / diffLigne; // +1 ou -1
+        int directionColonne = (endpositionY - startpositionY) / diffColonne; // +1 ou -1
 
-        int ligneCourante = startLine + directionLigne;
-        int colonneCourante = startColumn + directionColonne;
+        int ligneCourante = startpositionX + directionLigne;
+        int colonneCourante = startpositionY + directionColonne;
 
-        while (ligneCourante != endLine && colonneCourante != endColumn) {
+        while (ligneCourante != endpositionX && colonneCourante != endpositionY) {
             Case caseIntermediaire = plateau.getCase(ligneCourante, colonneCourante);
             if (caseIntermediaire.getPiece() != null) {
                 return false; // Chemin bloqué
@@ -47,7 +47,7 @@ public class Dame extends Piece{
         }
 
         // Vérification de la capture si une pièce est rencontrée
-        Case caseIntermediaire = plateau.getCase((startLine + endLine) / 2, (startColumn + endColumn) / 2);
+        Case caseIntermediaire = plateau.getCase((startpositionX + endpositionX) / 2, (startpositionY + endpositionY) / 2);
         if (caseIntermediaire.getPiece() != null &&
             (caseIntermediaire.getPiece().getCouleur()==(this.getCouleur()))==false) {
             return true; // Capture valide

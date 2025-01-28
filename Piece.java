@@ -1,13 +1,13 @@
 public abstract class Piece {
     public int couleur;
-    public int line;
-    public int column;
+    public int positionX;
+    public int positionY;
     public int role;
 
-    public Piece(int couleur, int line, int column, int role) {
+    public Piece(int couleur, int positionX, int positionY, int role) {
         this.couleur = couleur;
-        this.line = line;
-        this.column = column;
+        this.positionX = positionX;
+        this.positionY = positionY;
         this.role = role;
     }
     
@@ -15,12 +15,12 @@ public abstract class Piece {
         return couleur;
     }
 
-    public int getLine() {
-        return line;
+    public int getpositionX() {
+        return positionX;
     }
 
-    public int getColumn() {
-        return column;
+    public int getpositionY() {
+        return positionY;
     }
 
     public int getRole() {
