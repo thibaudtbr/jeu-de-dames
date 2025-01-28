@@ -11,6 +11,7 @@ public class InterfaceGraphique {
     private JPanel plateauPanel; // Plateau de jeu
     private JButton[][] boutons; // Boutons représentant les cases
     private Jeu jeu; // Lien vers la logique du jeu
+    private JLabel messageLabel; // Label pour afficher le message en haut
 
     private Icon pionBlanc;
     private Icon pionNoir;
@@ -42,6 +43,10 @@ public class InterfaceGraphique {
 
                 final int l = ligne;
                 final int c = colonne;
+
+                messageLabel = new JLabel("C'est au tour de : " + jeu.getJoueurCourant().getNom(), SwingConstants.CENTER);
+                messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                frame.add(messageLabel, BorderLayout.NORTH);
 
                 bouton.addActionListener(new ActionListener() {
                     @Override
