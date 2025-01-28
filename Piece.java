@@ -31,5 +31,27 @@ public abstract class Piece {
         return role==3;
     }
 
+    public void setPosition(int positionX, int positionY) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+
+        if (isDame() == false) {
+            Promotion();
+        }
+    }
+
+    public void promotion() {
+        // Si le pion atteint la dernière ligne de l'adversaire
+        if (this.getCouleur() == 0 && this.getpositionX() == 0) {
+            // Pion blanc atteint la ligne 0, devient Dame
+            this.role = 3; // Rôle 3 représente la dame
+            System.out.println("Le pion blanc est devenu une dame !");
+        } else if (this.getCouleur() == 1 && this.getpositionX() == 9) {
+            // Pion noir atteint la ligne 9, devient Dame
+            this.role = 3; // Rôle 3 représente la dame
+            System.out.println("Le pion noir est devenu une dame !");
+        }
+    }
+
     public abstract boolean deplacementValide(Case caseDepart, Case caseArrivee, Plateau plateau);
 }
