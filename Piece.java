@@ -27,5 +27,9 @@ public abstract class Piece {
         return role;
     }
 
+    public boolean isDame() {
+        return role==3;
+    }
+
     public abstract boolean deplacementValide(Case caseDepart, Case caseArrivee, Plateau plateau);
 }
