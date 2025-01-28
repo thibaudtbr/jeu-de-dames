@@ -27,5 +27,5 @@ public abstract class Piece {
         return couleur;
     }
 
-    public abstract boolean deplacementValide();
+    public abstract boolean deplacementValide(Case caseDepart, Case caseArrivee, Plateau plateau);
 }
