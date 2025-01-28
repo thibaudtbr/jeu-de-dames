@@ -4,7 +4,6 @@ public class Dame extends Piece{
         super(couleur,positionX, positionY, role);
     }
 
-    @Override
     public boolean deplacementValide(Case caseDepart, Case caseArrivee, Plateau plateau) {
         int startpositionX = caseDepart.getpositionX();
         int startpositionY = caseDepart.getpositionY();
