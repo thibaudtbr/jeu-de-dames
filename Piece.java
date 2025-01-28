@@ -24,7 +24,7 @@ public abstract class Piece {
     }
 
     public int getRole() {
-        return couleur;
+        return role;
     }
 
     public abstract boolean deplacementValide(Case caseDepart, Case caseArrivee, Plateau plateau);
