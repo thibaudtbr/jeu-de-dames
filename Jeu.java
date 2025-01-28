@@ -14,6 +14,26 @@ public class Jeu {
         joueurCourant = joueur1; // Le joueur blanc commence
     }
 
+        // Méthode pour récupérer le plateau
+    public Plateau getPlateau() {
+        return this.plateau;
+    }
+
+        // Méthode pour gérer un clic sur une case
+    public void gestionClic(int ligne, int colonne) {
+        Case caseCliquee = plateau.getCase(ligne, colonne); // Récupère la case cliquée
+        if (caseCliquee != null) {
+            if (caseCliquee.getPiece() != null) {
+                System.out.println("Case cliquée avec une pièce : " + caseCliquee.getPiece());
+                // Logique pour gérer la sélection ou le déplacement
+            } else {
+                System.out.println("Case vide cliquée.");
+            }
+        } else {
+            System.out.println("Clic hors limites !");
+        }
+    }
+
     // Lance le jeu
     public void lancerJeu() {
         boolean jeuEnCours = true;
@@ -113,7 +133,7 @@ public class Jeu {
             // Les pions blancs deviennent dames quand ils atteignent la ligne du haut
             this.isDame = true;
             System.out.println("Le pion blanc est devenu une dame !");
-        } else if (couleur.equals(1) && positionY == 10) {
+        } else if (couleur == 1 && positionY == 10) {
             // Les pions noirs deviennent dames quand ils atteignent la ligne du bas
             this.isDame = true;
             System.out.println("Le pion noir est devenu une dame !");
