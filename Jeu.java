@@ -1,75 +1,89 @@
-import java.util.ArrayList;
-
-import javax.swing.JOptionPane; // Autorisé car partie de Swing
+import javax.swing.JOptionPane;
 
 public class Jeu {
-    private Plateau plateau; // Le plateau de jeu
-    private Joueur joueur1; // Joueur 1
-    private Joueur joueur2; // Joueur 2
-    private Joueur joueurCourant; // Le joueur dont c'est le tour
-    private ArrayList<Case> casesValides = new ArrayList<>();
+    private Plateau plateau;
+    private Joueur joueur1;
+    private Joueur joueur2;
+    private Joueur joueurCourant;
+    private Case caseSelectionnee = null;  // Pour mémoriser la case actuellement sélectionnée
+    private Case caseCliquee = null;
 
-    // Constructeur
     public Jeu() {
-        plateau = new Plateau(); // Initialise un nouveau plateau
-        joueur1 = new Joueur(0); // Joueur 1 joue les pièces blanches
-        joueur2 = new Joueur(1); // Joueur 2 joue les pièces noires
-        joueurCourant = joueur1; // Le joueur blanc commence
+        plateau = new Plateau(); 
+        joueur1 = new Joueur(0); 
+        joueur2 = new Joueur(1); 
+        joueurCourant = joueur1; 
     }
 
-        // Méthode pour récupérer le plateau
+
     public Plateau getPlateau() {
         return this.plateau;
     }
 
-    private Case caseSelectionnee = null;  // Pour mémoriser la case actuellement sélectionnée
 
-    public Case getCaseSelectionnee() {
-        return caseSelectionnee;
-    }
-    
-    public void setCaseSelectionnee(Case caseSelectionnee) {
-        this.caseSelectionnee = caseSelectionnee;
-    }
+        // Méthode pour gérer un clic sur une case
+    public void gestionClic(int ligne, int colonne) {
+        caseCliquee = plateau.getCase(ligne, colonne);
+    if (caseSelectionnee == null) {
+        if (caseCliquee.getPiece() != null && caseCliquee.getPiece().getCouleur() == joueurCourant.getCouleur()) {
+            caseSelectionnee = caseCliquee;
+            System.out.println("Case sélectionnée : " + caseCliquee);
 
-    public ArrayList<Case> getCasesValides() {
-        return casesValides;
-    }
-    
-
-    public void calculerCasesValides(Case caseDepart) {
-        casesValides.clear();
-        if (caseDepart.getPiece() != null) {
-            casesValides = caseDepart.getPiece().casesValides(plateau);
+        } else if (caseCliquee.getPiece() == null ){
+            JOptionPane.showMessageDialog(null, "Case vide, sélectionnée une autre case");
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "ce n'est pas votre tour");
+        }
+    } else {
+        if (caseCliquee == caseSelectionnee) {
+            System.out.println("Désélection de la case sélectionnée.");
+            caseSelectionnee = null; 
+            caseCliquee =null;
+            JOptionPane.showMessageDialog(null, "Désélection de la case sélectionnée.");
+            System.out.println("caseSelectionnee après désélection : " + caseSelectionnee);
+        }
+        // Si une case a déjà été sélectionnée, tenter de déplacer la pièce
+        if (validerDeplacement(caseSelectionnee, caseCliquee) == true) {
+            effectuerDeplacement(caseSelectionnee, caseCliquee);
+            promouvoirSiNecessaire(caseCliquee);
+            changerJoueur(); 
+            caseSelectionnee = null;
+        } else {
+            JOptionPane.showMessageDialog(null, "Déplacement invalide.");
         }
     }
+    }
+
+    public void CaseSelectionneeVidee (Case caseSelectionnee) {
+        caseSelectionnee = null;
+    }
+
+    
     
 
-     
-
-    // Lance le jeu
     public void lancerJeu() {
         boolean jeuEnCours = true;
 
         while (jeuEnCours) {
-            plateau.afficherPlateau(); // Affiche le plateau
+            plateau.afficherPlateau();
             JOptionPane.showMessageDialog(null, "Tour de " + joueurCourant.getCouleur());
 
-            // Demander au joueur de choisir une pièce et une case cible
+
             Case caseDepart = demanderCase("Sélectionnez une pièce à déplacer (ligne, colonne) : ");
             Case caseArrivee = demanderCase("Sélectionnez la case cible (ligne, colonne) : ");
 
-            // Valider et exécuter le mouvement
+
             if (validerDeplacement(caseDepart, caseArrivee)) {
                 effectuerDeplacement(caseDepart, caseArrivee);
                 caseArrivee.getPiece().isDame();
 
-                // Vérifier les conditions de victoire
+            
                 if (verifierVictoire()) {
                     JOptionPane.showMessageDialog(null, joueurCourant.getCouleur() + " a gagné !");
                     jeuEnCours = false;
                 } else {
-                    changerJoueur(); // Passe au joueur suivant
+                    changerJoueur();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Déplacement invalide. Réessayez.");
@@ -94,11 +108,8 @@ public class Jeu {
 
     // Méthode pour effectuer un déplacement
     public void effectuerDeplacement(Case caseDepart, Case caseArrivee) {
-        caseArrivee.setPiece(caseDepart.getPiece()); // Place la pièce sur la case cible
-        caseDepart.setPiece(null); // Vide la case de départ
-    
-        // Vérifier et promouvoir le pion si nécessaire
-        promouvoirSiNecessaire(caseArrivee);
+        caseArrivee.setPiece(caseDepart.getPiece());
+        caseDepart.setPiece(null); 
     }
 
     // Méthode pour vérifier et promouvoir un pion en dame si nécessaire
@@ -110,7 +121,6 @@ public class Jeu {
             // Vérification si le pion atteint la dernière ligne
             if ((pion.getCouleur() == 0 && caseArrivee.getpositionX() == 0) || 
                 (pion.getCouleur() == 1 && caseArrivee.getpositionX() == 9)) {
-                // Promouvoir le pion en dame
                 caseArrivee.setPiece(new Dame(pion.getCouleur(), pion.getpositionX(), pion.getpositionY(), 3)); // Remplace le pion par une dame
             }
         }
@@ -137,18 +147,17 @@ public class Jeu {
 
     // Vérifie si un joueur a gagné
     public boolean verifierVictoire() {
-        // Un joueur gagne si l'adversaire n'a plus de pièces ou ne peut plus jouer
         return !joueur2.aDesPieces(plateau) || !joueur1.aDesPieces(plateau);
     }
 
-    // Demande un entier via une boîte de dialogue
+   
     public int demanderEntier(String message) {
         while (true) {
             try {
                 String input = JOptionPane.showInputDialog(null, message);
                 if (input == null) {
                     JOptionPane.showMessageDialog(null, "Action annulée.");
-                    System.exit(0); // Quitte le programme si l'utilisateur annule
+                    System.exit(0); 
                 }
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
@@ -164,8 +173,8 @@ public class Jeu {
     }
 
     public static void main(String[] args) {
-        Jeu jeu = new Jeu(); // Crée une nouvelle partie
-        //jeu.lancerJeu(); // Lance la partie
+        Jeu jeu = new Jeu();
+        //jeu.lancerJeu();
         jeu.lancerJeuAvecInterface();
     }
 
