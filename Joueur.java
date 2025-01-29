@@ -8,7 +8,7 @@ public class Joueur {
 
     // Getter pour la couleur
     public int getCouleur() {
-        return couleur; 
+        return couleur;
     }
 
     // Vérifie si le joueur a encore des pièces sur le plateau
