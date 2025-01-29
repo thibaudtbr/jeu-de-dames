@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane; // Autorisé car partie de Swing
 
 public class Jeu {
@@ -5,6 +7,7 @@ public class Jeu {
     private Joueur joueur1; // Joueur 1
     private Joueur joueur2; // Joueur 2
     private Joueur joueurCourant; // Le joueur dont c'est le tour
+    private ArrayList<Case> casesValides = new ArrayList<>();
 
     // Constructeur
     public Jeu() {
@@ -19,20 +22,30 @@ public class Jeu {
         return this.plateau;
     }
 
-        // Méthode pour gérer un clic sur une case
-    public void gestionClic(int ligne, int colonne) {
-        Case caseCliquee = plateau.getCase(ligne, colonne); // Récupère la case cliquée
-        if (caseCliquee != null) {
-            if (caseCliquee.getPiece() != null) {
-                System.out.println("Case cliquée avec une pièce : " + caseCliquee.getPiece());
-                // Logique pour gérer la sélection ou le déplacement
-            } else {
-                System.out.println("Case vide cliquée.");
-            }
-        } else {
-            System.out.println("Clic hors limites !");
+    private Case caseSelectionnee = null;  // Pour mémoriser la case actuellement sélectionnée
+
+    public Case getCaseSelectionnee() {
+        return caseSelectionnee;
+    }
+    
+    public void setCaseSelectionnee(Case caseSelectionnee) {
+        this.caseSelectionnee = caseSelectionnee;
+    }
+
+    public ArrayList<Case> getCasesValides() {
+        return casesValides;
+    }
+    
+
+    public void calculerCasesValides(Case caseDepart) {
+        casesValides.clear();
+        if (caseDepart.getPiece() != null) {
+            casesValides = caseDepart.getPiece().casesValides(plateau);
         }
     }
+    
+
+     
 
     // Lance le jeu
     public void lancerJeu() {
@@ -47,8 +60,9 @@ public class Jeu {
             Case caseArrivee = demanderCase("Sélectionnez la case cible (ligne, colonne) : ");
 
             // Valider et exécuter le mouvement
-            if (validerDeplacement(caseDepart, caseArrivee, plateau)) {
+            if (validerDeplacement(caseDepart, caseArrivee)) {
                 effectuerDeplacement(caseDepart, caseArrivee);
+                caseArrivee.getPiece().isDame();
 
                 // Vérifier les conditions de victoire
                 if (verifierVictoire()) {
@@ -64,65 +78,71 @@ public class Jeu {
     }
 
     // Méthode pour demander une case au joueur
-    private Case demanderCase(String message) {
+    public Case demanderCase(String message) {
         int ligne = demanderEntier(message + " (Ligne)");
         int colonne = demanderEntier(message + " (Colonne)");
         return plateau.getCase(ligne, colonne);
     }
 
-    public boolean validerDeplacement(Case caseDepart, Case caseArrivee, Plateau plateau) {
-        if (caseArrivee.getPiece() != null) {
-            return false; // La case cible doit être vide
+    // Méthode pour valider un déplacement
+    public boolean validerDeplacement(Case caseDepart, Case caseArrivee) {
+        if (caseDepart.getPiece() != null && caseDepart.getPiece().getCouleur()==joueurCourant.getCouleur()) {
+            return caseDepart.getPiece().deplacementValide(caseDepart, caseArrivee, plateau);
         }
-    
-        int direction = (this.getCouleur() == 0) ? 1 : -1; // Blancs avancent vers le bas, Noirs vers le haut
-                int deltaLigne = caseArrivee.getpositionX() - caseDepart.getpositionX();
-                int deltaColonne = Math.abs(caseArrivee.getpositionY() - caseDepart.getpositionY());
-            
-                // Déplacement simple (une case en diagonale)
-                if (deltaLigne == direction && deltaColonne == 1) {
-                    return true;
-                }
-            
-                // Saut par-dessus une pièce adverse
-                if (deltaLigne == 2 * direction && deltaColonne == 2) {
-                    int ligneIntermediaire = caseDepart.getpositionX() + direction;
-                    int colonneIntermediaire = (caseDepart.getpositionY() + caseArrivee.getpositionY()) / 2;
-                    Case caseIntermediaire = plateau.getCase(ligneIntermediaire, colonneIntermediaire);
-            
-                    if (caseIntermediaire.getPiece() != null && caseIntermediaire.getPiece().getCouleur() != this.getCouleur()) {
-                        return true;
-                    }
-                }
-            
-                return false;
-            }
-            
-        
-            private int getCouleur() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'getCouleur'");
-            }
-        
-            // Méthode pour effectuer un déplacement
-    private void effectuerDeplacement(Case caseDepart, Case caseArrivee) {
+        return false;
+    }
+
+    // Méthode pour effectuer un déplacement
+    public void effectuerDeplacement(Case caseDepart, Case caseArrivee) {
         caseArrivee.setPiece(caseDepart.getPiece()); // Place la pièce sur la case cible
         caseDepart.setPiece(null); // Vide la case de départ
+    
+        // Vérifier et promouvoir le pion si nécessaire
+        promouvoirSiNecessaire(caseArrivee);
+    }
+
+    // Méthode pour vérifier et promouvoir un pion en dame si nécessaire
+    public void promouvoirSiNecessaire(Case caseArrivee) {
+        Piece piece = caseArrivee.getPiece();
+        if (piece instanceof Pion) {
+            Pion pion = (Pion) piece;
+        
+            // Vérification si le pion atteint la dernière ligne
+            if ((pion.getCouleur() == 0 && caseArrivee.getpositionX() == 0) || 
+                (pion.getCouleur() == 1 && caseArrivee.getpositionX() == 9)) {
+                // Promouvoir le pion en dame
+                caseArrivee.setPiece(new Dame(pion.getCouleur(), pion.getpositionX(), pion.getpositionY(), 3)); // Remplace le pion par une dame
+            }
+        }
     }
 
     // Méthode pour changer de joueur
-    private void changerJoueur() {
+    public void changerJoueur() {
         joueurCourant = (joueurCourant == joueur1) ? joueur2 : joueur1;
+        JOptionPane.showMessageDialog(null, "C'est au tour du Joueur " + tourJoueur());
+    }
+                
+    public String tourJoueur() {
+        if (getJoueurCourant().getCouleur() == 0) {
+            return"Joueur Blanc";
+        } else {
+            return "Joueur Noir";
+        }
+    }
+    
+
+    public Joueur getJoueurCourant() {
+        return joueurCourant;
     }
 
     // Vérifie si un joueur a gagné
-    private boolean verifierVictoire() {
+    public boolean verifierVictoire() {
         // Un joueur gagne si l'adversaire n'a plus de pièces ou ne peut plus jouer
         return !joueur2.aDesPieces(plateau) || !joueur1.aDesPieces(plateau);
     }
 
     // Demande un entier via une boîte de dialogue
-    private int demanderEntier(String message) {
+    public int demanderEntier(String message) {
         while (true) {
             try {
                 String input = JOptionPane.showInputDialog(null, message);
@@ -136,10 +156,20 @@ public class Jeu {
             }
         }
     }
+
+    public void lancerJeuAvecInterface() {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            new InterfaceGraphique(this); // Associe l'interface graphique au jeu
+        });
+    }
+
     public static void main(String[] args) {
         Jeu jeu = new Jeu(); // Crée une nouvelle partie
-        //jeu.lancerJeu(); // Lance la sur le terminal
-        // Version graphique :
-        new InterfaceGraphique(jeu);
+        //jeu.lancerJeu(); // Lance la partie
+        jeu.lancerJeuAvecInterface();
     }
+
+    
+
+    
 }
