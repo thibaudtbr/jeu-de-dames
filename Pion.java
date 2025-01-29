@@ -21,18 +21,17 @@ public class Pion extends Piece {
             if (this.getCouleur() == 0) {
                 // Blancs montent : diffLigne doit être négatif
                 if (diffLigne >= 0) {
-                    return false; // Ne peut pas aller en arrière
+                    return false; 
                 }
             } else {
                 // Noirs descendent : diffLigne doit être positif
                 if (diffLigne <= 0) {
-                    return false; // Ne peut pas aller en arrière
+                    return false; 
                 }
             }
 
-            // Vérifie si la case d'arrivée est vide
             if (caseArrivee.getPiece() != null) {
-                return false; // Ne peut pas se déplacer si la case d'arrivée est occupée
+                return false; 
             }
 
             return true;
@@ -44,24 +43,20 @@ public class Pion extends Piece {
             int midpositionY = (startpositionY + endpositionY) / 2;
             Case caseMilieu = plateau.getCase(midpositionX, midpositionY);
 
-            // Vérifie s'il y a une pièce adverse sur la case du milieu
             if (caseMilieu.getPiece() != null && (caseMilieu.getPiece().getCouleur() != this.getCouleur())) {
-                // Vérifie si la case d'arrivée est libre
                 if (caseArrivee.getPiece() == null) {
                     // Le pion ne peut capturer que dans la direction de sa couleur
                     if (this.getCouleur() == 0) {
                         // Blancs montent, donc diffLigne doit être négatif
                         if (diffLigne >= 0) {
-                            return false; // Ne peut pas capturer en arrière
+                            return false; 
                         }
                     } else {
                         // Noirs descendent, donc diffLigne doit être positif
                         if (diffLigne <= 0) {
-                            return false; // Ne peut pas capturer en arrière
+                            return false; 
                         }
                     }
-
-                    // Capture valide : Supprimer la pièce capturée
                     caseMilieu.setPiece(null); // Supprime la pièce capturée
                     return true;
                 }
