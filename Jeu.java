@@ -9,8 +9,8 @@ public class Jeu {
     // Constructeur
     public Jeu() {
         plateau = new Plateau(); // Initialise un nouveau plateau
-        joueur1 = new Joueur("Blanc"); // Joueur 1 joue les pièces blanches
-        joueur2 = new Joueur("Noir"); // Joueur 2 joue les pièces noires
+        joueur1 = new Joueur(0); // Joueur 1 joue les pièces blanches
+        joueur2 = new Joueur(1); // Joueur 2 joue les pièces noires
         joueurCourant = joueur1; // Le joueur blanc commence
     }
 
@@ -47,7 +47,7 @@ public class Jeu {
             Case caseArrivee = demanderCase("Sélectionnez la case cible (ligne, colonne) : ");
 
             // Valider et exécuter le mouvement
-            if (validerDeplacement(caseDepart, caseArrivee)) {
+            if (validerDeplacement(caseDepart, caseArrivee, plateau)) {
                 effectuerDeplacement(caseDepart, caseArrivee);
 
                 // Vérifier les conditions de victoire
@@ -70,15 +70,41 @@ public class Jeu {
         return plateau.getCase(ligne, colonne);
     }
 
-    // Méthode pour valider un déplacement
-    private boolean validerDeplacement(Case caseDepart, Case caseArrivee) {
-        if (caseDepart.getPiece() != null && caseDepart.getPiece().getCouleur().equals(joueurCourant.getCouleur())) {
-            return caseDepart.getPiece().deplacementValide(caseDepart, caseArrivee, plateau);
+    public boolean validerDeplacement(Case caseDepart, Case caseArrivee, Plateau plateau) {
+        if (caseArrivee.getPiece() != null) {
+            return false; // La case cible doit être vide
         }
-        return false;
-    }
-
-    // Méthode pour effectuer un déplacement
+    
+        int direction = (this.getCouleur() == 0) ? 1 : -1; // Blancs avancent vers le bas, Noirs vers le haut
+                int deltaLigne = caseArrivee.getpositionX() - caseDepart.getpositionX();
+                int deltaColonne = Math.abs(caseArrivee.getpositionY() - caseDepart.getpositionY());
+            
+                // Déplacement simple (une case en diagonale)
+                if (deltaLigne == direction && deltaColonne == 1) {
+                    return true;
+                }
+            
+                // Saut par-dessus une pièce adverse
+                if (deltaLigne == 2 * direction && deltaColonne == 2) {
+                    int ligneIntermediaire = caseDepart.getpositionX() + direction;
+                    int colonneIntermediaire = (caseDepart.getpositionY() + caseArrivee.getpositionY()) / 2;
+                    Case caseIntermediaire = plateau.getCase(ligneIntermediaire, colonneIntermediaire);
+            
+                    if (caseIntermediaire.getPiece() != null && caseIntermediaire.getPiece().getCouleur() != this.getCouleur()) {
+                        return true;
+                    }
+                }
+            
+                return false;
+            }
+            
+        
+            private int getCouleur() {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'getCouleur'");
+            }
+        
+            // Méthode pour effectuer un déplacement
     private void effectuerDeplacement(Case caseDepart, Case caseArrivee) {
         caseArrivee.setPiece(caseDepart.getPiece()); // Place la pièce sur la case cible
         caseDepart.setPiece(null); // Vide la case de départ
@@ -110,33 +136,10 @@ public class Jeu {
             }
         }
     }
-
     public static void main(String[] args) {
         Jeu jeu = new Jeu(); // Crée une nouvelle partie
-        jeu.lancerJeu(); // Lance la partie
-    }
-
-    public boolean isDame() {
-        return Piece.getRole==3;
-    }
-
-    public void setPosition(int x, int y) {
-        this.positionX = x;
-        this.positionY = y;
-
-        // Vérifie si le pion doit être promu en dame
-        Promotion();
-    }
-
-    private void Promotion() {
-        if (couleur.equals(0) && positionY == 0) {
-            // Les pions blancs deviennent dames quand ils atteignent la ligne du haut
-            this.isDame = true;
-            System.out.println("Le pion blanc est devenu une dame !");
-        } else if (couleur == 1 && positionY == 10) {
-            // Les pions noirs deviennent dames quand ils atteignent la ligne du bas
-            this.isDame = true;
-            System.out.println("Le pion noir est devenu une dame !");
-        }
+        //jeu.lancerJeu(); // Lance la sur le terminal
+        // Version graphique :
+        new InterfaceGraphique(jeu);
     }
 }
