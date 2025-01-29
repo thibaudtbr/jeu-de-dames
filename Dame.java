@@ -10,49 +10,43 @@ public class Dame extends Piece{
         int endpositionX = caseArrivee.getpositionX();
         int endpositionY = caseArrivee.getpositionY();
 
-        // Calcul des différences
-        int diffLigne = endpositionX - startpositionX;
+        int diffLigne = Math.abs(endpositionX - startpositionX);
         int diffColonne = Math.abs(endpositionY - startpositionY);
 
-        // Vérification des limites du plateau
-        if (endpositionX < 0 || endpositionX >= 10 || endpositionY < 0 || endpositionY >= 10) {
-            return false;
-        }
-
-        // Vérification que le déplacement est en diagonale
-        if (diffLigne != diffColonne) {
-            return false; // Pas un mouvement diagonal
-        }
-
-        // Vérification que la case cible est vide
-        if (caseArrivee.getPiece() != null) {
-            return false; // On ne peut pas aller sur une case occupée
-        }
-
-        // Vérification que le chemin est libre
-        int directionLigne = (endpositionX - startpositionX) / diffLigne; // +1 ou -1
-        int directionColonne = (endpositionY - startpositionY) / diffColonne; // +1 ou -1
-
-        int ligneCourante = startpositionX + directionLigne;
-        int colonneCourante = startpositionY + directionColonne;
-
-        while (ligneCourante != endpositionX && colonneCourante != endpositionY) {
-            Case caseIntermediaire = plateau.getCase(ligneCourante, colonneCourante);
-            if (caseIntermediaire.getPiece() != null) {
-                return false; // Chemin bloqué
+        // Déplacement classique en diagonale (n'importe quelle distance)
+        if (diffLigne == diffColonne) {
+            // Vérifier s'il y a une pièce adverse à capturer
+            int directionLigne = (endpositionX - startpositionX) / diffLigne;
+            int directionColonne = (endpositionY - startpositionY) / diffColonne;
+            
+            int x = startpositionX + directionLigne;
+            int y = startpositionY + directionColonne;
+            
+            // Vérifier s'il y a des pièces à capturer entre la case de départ et la case d'arrivée
+            while (x != endpositionX && y != endpositionY) {
+                Case caseIntermediaire = plateau.getCase(x, y);
+                if (caseIntermediaire.getPiece() != null) {
+                    // Si une pièce est présente sur la case intermédiaire, vérifier si elle est de la couleur adverse
+                    if (caseIntermediaire.getPiece().getCouleur() != this.getCouleur()) {
+                        // Si la case d'arrivée est vide, c'est une capture valide
+                        if (caseArrivee.getPiece() == null) {
+                            caseIntermediaire.setPiece(null); // Supprimer la pièce capturée
+                            return true;
+                        }
+                    } else {
+                        // Une pièce amie bloque le mouvement
+                        return false;
+                    }
+                }
+                x += directionLigne;
+                y += directionColonne;
             }
-            ligneCourante += directionLigne;
-            colonneCourante += directionColonne;
+            // Si le déplacement est sans capture, vérifier que la case d'arrivée est vide
+            return caseArrivee.getPiece() == null;
         }
 
-        // Vérification de la capture si une pièce est rencontrée
-        Case caseIntermediaire = plateau.getCase((startpositionX + endpositionX) / 2, (startpositionY + endpositionY) / 2);
-        if (caseIntermediaire.getPiece() != null &&
-            (caseIntermediaire.getPiece().getCouleur()==(this.getCouleur()))==false) {
-            return true; // Capture valide
-        }
-
-        // Si tout est bon, le déplacement est valide
-        return true;
+        return false; // Le déplacement n'est pas valide si ce n'est pas en diagonale
     }
+
+    
 }
