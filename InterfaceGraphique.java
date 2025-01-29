@@ -1,13 +1,11 @@
-import javax.swing.*; // Bibliothèque pour créer des interfaces graphiques en Java
-import java.awt.*; // Contient les classes pour la gestion des composants graphiques comme les couleurs et les mises en page
-import java.awt.event.ActionEvent; // Permet de gérer les événements d'action, comme les clics sur les boutons
-import java.awt.event.ActionListener; // Interface pour écouter et répondre aux événements d'action
-import java.awt.event.ComponentAdapter; // Classe adaptateur pour gérer les événements de composant, comme le redimensionnement
-import java.awt.event.ComponentEvent; // Représente un événement lié à un composant, comme un changement de taille
-import java.util.ArrayList; // Classe utilitaire pour manipuler des listes dynamiques
+import javax.swing.*; // Bibliothèque pour créer des interfaces graphiques en Java (JFrame, JPanel, JButton, JLabel, Icon, ImageIcon, BorderFactory)
+import java.awt.*; // Contient les classes pour la gestion des composants graphiques comme les couleurs et les mises en page (BorderLayout, GridLayout, Color)
+import java.awt.event.ActionEvent; // Permet de gérer les événements d'action, comme les clics case
+import java.awt.event.ActionListener; // Interface pour écouter et répondre aux événements d'action clic case (gere qu'est ce qui se passe qu'en on clic sur une case)
+import java.util.ArrayList; // Classe utilitaire pour manipuler des listes dynamiques (gestion de donné tel que les positions)
 
 public class InterfaceGraphique {
-    private JFrame frame; // Fenêtre principale
+    private JFrame frame; // Fenêtre principale 
     private JPanel plateauPanel; // Plateau de jeu
     private JButton[][] boutons; // Boutons représentant les cases
     private Jeu jeu; // Lien vers la logique du jeu
@@ -44,10 +42,6 @@ public class InterfaceGraphique {
                 final int l = ligne;
                 final int c = colonne;
 
-                messageLabel = new JLabel("C'est au tour de : " + jeu.getJoueurCourant().getNom(), SwingConstants.CENTER);
-                messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
-                frame.add(messageLabel, BorderLayout.NORTH);
-
                 bouton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -56,11 +50,11 @@ public class InterfaceGraphique {
                     }
                 });
 
-                plateauPanel.add(bouton);
+                plateauPanel.add(bouton); // le .add est disponible grace a l'import swing et permet d'ajouter
             }
         }
 
-        frame.add(plateauPanel, BorderLayout.CENTER);
+        frame.add(plateauPanel, BorderLayout.CENTER); 
         frame.setVisible(true);
 
         frame.addComponentListener(new ComponentAdapter() {
@@ -83,8 +77,8 @@ public class InterfaceGraphique {
 
     // Crée une icône redimensionnée
     private Icon creerIconeRedimensionnee(String cheminImage, int largeur, int hauteur) {
-        ImageIcon icone = new ImageIcon(cheminImage);
-        Image image = icone.getImage();
+        ImageIcon icone = new ImageIcon(cheminImage); // import swing charge l'image
+        Image image = icone.getImage(); // import awt
         Image imageRedimensionnee = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
         return new ImageIcon(imageRedimensionnee);
     }
@@ -96,12 +90,12 @@ public class InterfaceGraphique {
                 Case currentCase = plateau.getCase(ligne, colonne);
                 JButton bouton = boutons[ligne][colonne];
 
-                if ((ligne + colonne) % 2 == 0) {
+                if ((ligne + colonne) % 2 == 0) { //paire 
                     bouton.setBackground(Color.LIGHT_GRAY);
-                } else {
+                } else { // impaire
                     bouton.setBackground(Color.DARK_GRAY);
                 }
-
+                // Enlève toute icône précédemment affichée sur le bouton
                 bouton.setIcon(null);
 
                 if (currentCase.getPiece() != null) {
@@ -112,7 +106,7 @@ public class InterfaceGraphique {
                         bouton.setIcon(piece.getCouleur() == 0 ? dameBlanc : dameNoir);
                     }
                 }
-
+                // change la couleur des cases de déplacement et de capture
                 if (casesDeplacement.contains(currentCase)) {
                     bouton.setBackground(Color.YELLOW);
                 } else if (casesCapture.contains(currentCase)) {
